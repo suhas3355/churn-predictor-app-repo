@@ -132,7 +132,7 @@ if st.button("Predict Churn"):
     prediction = model.predict(input_df)[0]
     proba = model.predict_proba(input_df)[0][1]
 
-    result = "🚨 Likely to Churn" if proba >= 0.5 else "✅ Likely to Stay"
+    result = "🚨 Likely to Churn" if proba >= 0.3 else "✅ Likely to Stay"
     st.success(f"Prediction: {result}")
     st.write(f"🧠 Churn Probability: {proba:.2f}")
 
