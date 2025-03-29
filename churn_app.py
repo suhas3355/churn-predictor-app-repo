@@ -65,8 +65,8 @@ st.subheader("2. (Optional) Predict Single Customer by ID")
 customer_id = st.text_input("Enter Customer ID")
 
 if st.button("Predict Churn for This Customer") and uploaded_file and customer_id:
-    if "df" in locals():
-        match = df[df["CustomerID"].astype(str) == str(customer_id)]
+    if "raw_df" in locals():
+        match = raw_df[raw_df["CustomerID"].astype(str) == str(customer_id)]
         if not match.empty:
             score = match["ChurnScore"].values[0]
             risk = match["RiskLevel"].values[0]
@@ -75,6 +75,7 @@ if st.button("Predict Churn for This Customer") and uploaded_file and customer_i
             st.warning("Customer ID not found in uploaded file.")
     else:
         st.warning("Please upload a CSV file first.")
+
 
 # Footer
 st.markdown("---")
