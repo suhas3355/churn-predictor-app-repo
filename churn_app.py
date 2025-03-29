@@ -48,18 +48,20 @@ if uploaded_file:
         st.subheader("Preview")
         st.dataframe(raw_df[["CustomerID", "ChurnScore", "RiskLevel"]].head())
 
-        st.metric("🔁 Average Churn Score", round(raw_df["ChurnScore"].mean(), 2))
-        st.metric("🚨 High-Risk Customers", (raw_df["ChurnScore"] > 0.75).sum())
-        # Number of rows processed
-        st.metric("🧾 Rows Processed", len(raw_df))
+        if "ChurnScore" in raw_df.columns:
+            st.metric("🔁 Average Churn Score", round(raw_df["ChurnScore"].mean(), 2))
+            st.metric("🚨 High-Risk Customers", (raw_df["ChurnScore"] > 0.75).sum())
 
-        # Churn classification based on 0.5 threshold
-        churned = (raw_df["ChurnScore"] >= 0.5).sum()
-        not_churned = (raw_df["ChurnScore"] < 0.5).sum()
+            # NEW
+            st.metric("🧾 Rows Processed", len(raw_df))
 
-        # Show breakdown
-        st.metric("❌ Customers Likely to Churn", churned)
-        st.metric("✅ Customers Likely to Stay", not_churned)
+            churned = (raw_df["ChurnScore"] >= 0.5).sum()
+            not_churned = (raw_df["ChurnScore"] < 0.5).sum()
+
+            st.metric("❌ Customers Likely to Churn", churned)
+            st.metric("✅ Customers Likely to Stay", not_churned)
+        else:
+            st.warning("ChurnScore column not found — unable to show stats.")
 
 
         # Download button
@@ -90,4 +92,4 @@ if st.button("Predict Churn for This Customer") and uploaded_file and customer_i
 
 # Footer
 st.markdown("---")
-st.markdown("🔐 [Privacy Policy](#) | 📫 [Contact](mailto:your@email.com) | 💻 [GitHub](https://github.com/suhas3355/churn-predictor-app-repo)")
+st.markdown("🔐 [Privacy Policy](#) | 📫 [Contact](mailto:suhas3355@gmail.com) | 💻 [GitHub](https://github.com/suhas3355/churn-predictor-app-repo)")
