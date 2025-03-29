@@ -49,20 +49,70 @@ if uploaded_file:
         st.dataframe(raw_df[["CustomerID", "ChurnScore", "RiskLevel"]].head())
 
         if "ChurnScore" in raw_df.columns:
-            st.metric("🔁 Average Churn Score", round(raw_df["ChurnScore"].mean(), 2))
-            st.metric("🚨 High-Risk Customers", (raw_df["ChurnScore"] > 0.75).sum())
-
-            # NEW
-            st.metric("🧾 Rows Processed", len(raw_df))
-
+            # Metrics
+            avg_score = round(raw_df["ChurnScore"].mean(), 2)
+            high_risk = (raw_df["ChurnScore"] > 0.75).sum()
+            total_rows = len(raw_df)
             churned = (raw_df["ChurnScore"] >= 0.5).sum()
             not_churned = (raw_df["ChurnScore"] < 0.5).sum()
 
-            st.metric("❌ Customers Likely to Churn", churned)
-            st.metric("✅ Customers Likely to Stay", not_churned)
-        else:
-            st.warning("ChurnScore column not found — unable to show stats.")
+            # Display in horizontal blocks
+            col1, col2, col3, col4, col5 = st.columns(5)
 
+            with col1:
+                st.metric("🔁 Average Churn Score", avg_score)
+
+            with col2:
+                st.metric("🚨 High-Risk Customers", high_risk)
+
+            with col3:
+                st.metric("🧾 Rows Processed", total_rows)
+
+            with col4:
+                st.metric("❌ Likely to Churn", churned)
+
+            with col5:
+                st.metric("✅ Likely to Stay", not_churned)
+        else:
+            st.warning("⛔ChurnScore column not found — unable to show stats.")
+        
+        # Metrics (rows processed, churned, etc.)
+
+        st.subheader("📊 Visual Summary")
+
+        import matplotlib.pyplot as plt
+
+        # Pie chart of churn vs no churn
+        churned = (raw_df["ChurnScore"] >= 0.5).sum()
+        not_churned = (raw_df["ChurnScore"] < 0.5).sum()
+
+        fig1, ax1 = plt.subplots()
+        ax1.pie(
+            [churned, not_churned],
+            labels=["Likely to Churn", "Likely to Stay"],
+            autopct="%1.1f%%",
+            startangle=90
+        )
+        ax1.axis("equal")
+        st.pyplot(fig1)
+
+        #Bar Chart: Risk Levels Breakdown
+        st.subheader("📊 Customer Risk Level Breakdown")
+        fig2, ax2 = plt.subplots()
+        # Calculate number of customers per risk level
+        risk_counts = raw_df["RiskLevel"].value_counts()
+        risk_counts.plot(kind="bar", color=["red", "orange", "green"], ax=ax2)
+        ax2.set_title("Customer Risk Levels")
+        ax2.set_ylabel("Count")
+        st.pyplot(fig2)
+
+        #histogram
+        fig3, ax3 = plt.subplots()
+        ax3.hist(raw_df["ChurnScore"], bins=10, color="skyblue", edgecolor="black")
+        ax3.set_title("Distribution of Churn Scores")
+        ax3.set_xlabel("Churn Score")
+        ax3.set_ylabel("Number of Customers")
+        st.pyplot(fig3)
 
         # Download button
         csv = raw_df.to_csv(index=False).encode("utf-8")
