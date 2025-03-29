@@ -50,6 +50,17 @@ if uploaded_file:
 
         st.metric("🔁 Average Churn Score", round(raw_df["ChurnScore"].mean(), 2))
         st.metric("🚨 High-Risk Customers", (raw_df["ChurnScore"] > 0.75).sum())
+        # Number of rows processed
+        st.metric("🧾 Rows Processed", len(raw_df))
+
+        # Churn classification based on 0.5 threshold
+        churned = (raw_df["ChurnScore"] >= 0.5).sum()
+        not_churned = (raw_df["ChurnScore"] < 0.5).sum()
+
+        # Show breakdown
+        st.metric("❌ Customers Likely to Churn", churned)
+        st.metric("✅ Customers Likely to Stay", not_churned)
+
 
         # Download button
         csv = raw_df.to_csv(index=False).encode("utf-8")
