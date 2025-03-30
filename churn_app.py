@@ -95,7 +95,7 @@ if uploaded_file:
         # Pie Chart
         with col1:
             st.markdown("#### 🥧 Churn Breakdown")
-            fig1, ax1 = plt.subplots(figsize=(3, 3))
+            fig1, ax1 = plt.subplots(figsize=(2, 2))
             ax1.pie([churned, not_churned],
                     labels=["Churn", "No Churn"],
                     autopct="%1.1f%%",
