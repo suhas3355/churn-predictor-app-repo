@@ -82,37 +82,40 @@ if uploaded_file:
 
         import matplotlib.pyplot as plt
 
-        # Pie chart of churn vs no churn
-        churned = (raw_df["ChurnScore"] >= 0.5).sum()
-        not_churned = (raw_df["ChurnScore"] < 0.5).sum()
-
-        fig1, ax1 = plt.subplots()
-        ax1.pie(
-            [churned, not_churned],
-            labels=["Likely to Churn", "Likely to Stay"],
-            autopct="%1.1f%%",
-            startangle=90
-        )
+        # Pie Chart: Churn vs. No Churn
+        fig1, ax1 = plt.subplots(figsize=(4, 4))
+        ax1.pie([churned, not_churned],
+                labels=["Likely to Churn", "Likely to Stay"],
+                autopct="%1.1f%%",
+                startangle=90)
         ax1.axis("equal")
-        st.pyplot(fig1)
 
-        #Bar Chart: Risk Levels Breakdown
-        st.subheader("📊 Customer Risk Level Breakdown")
-        fig2, ax2 = plt.subplots()
-        # Calculate number of customers per risk level
+        # Bar Chart: Risk Level Breakdown
         risk_counts = raw_df["RiskLevel"].value_counts()
+        fig2, ax2 = plt.subplots(figsize=(4, 4))
         risk_counts.plot(kind="bar", color=["red", "orange", "green"], ax=ax2)
         ax2.set_title("Customer Risk Levels")
         ax2.set_ylabel("Count")
-        st.pyplot(fig2)
 
-        #histogram
-        fig3, ax3 = plt.subplots()
+        # Histogram: Churn Score Distribution
+        fig3, ax3 = plt.subplots(figsize=(4, 4))
         ax3.hist(raw_df["ChurnScore"], bins=10, color="skyblue", edgecolor="black")
         ax3.set_title("Distribution of Churn Scores")
         ax3.set_xlabel("Churn Score")
-        ax3.set_ylabel("Number of Customers")
-        st.pyplot(fig3)
+        ax3.set_ylabel("Customers")
+
+        # Layout in columns
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.pyplot(fig1)
+
+        with col2:
+            st.pyplot(fig2)
+
+        with col3:
+            st.pyplot(fig3)
+
 
         # Download button
         csv = raw_df.to_csv(index=False).encode("utf-8")
