@@ -82,39 +82,46 @@ if uploaded_file:
 
         import matplotlib.pyplot as plt
 
-        # Pie Chart: Churn vs. No Churn
-        fig1, ax1 = plt.subplots(figsize=(4, 4))
-        ax1.pie([churned, not_churned],
-                labels=["Likely to Churn", "Likely to Stay"],
-                autopct="%1.1f%%",
-                startangle=90)
-        ax1.axis("equal")
+        # Churned vs Not Churned
+        churned = (raw_df["ChurnScore"] >= 0.5).sum()
+        not_churned = (raw_df["ChurnScore"] < 0.5).sum()
 
-        # Bar Chart: Risk Level Breakdown
+        # Risk level count
         risk_counts = raw_df["RiskLevel"].value_counts()
-        fig2, ax2 = plt.subplots(figsize=(4, 4))
-        risk_counts.plot(kind="bar", color=["red", "orange", "green"], ax=ax2)
-        ax2.set_title("Customer Risk Levels")
-        ax2.set_ylabel("Count")
 
-        # Histogram: Churn Score Distribution
-        fig3, ax3 = plt.subplots(figsize=(4, 4))
-        ax3.hist(raw_df["ChurnScore"], bins=10, color="skyblue", edgecolor="black")
-        ax3.set_title("Distribution of Churn Scores")
-        ax3.set_xlabel("Churn Score")
-        ax3.set_ylabel("Customers")
-
-        # Layout in columns
+        # Set up horizontal layout
         col1, col2, col3 = st.columns(3)
 
+        # Pie Chart
         with col1:
-            st.pyplot(fig1)
+            st.markdown("#### 🥧 Churn Breakdown")
+            fig1, ax1 = plt.subplots(figsize=(3, 3))
+            ax1.pie([churned, not_churned],
+                    labels=["Churn", "No Churn"],
+                    autopct="%1.1f%%",
+                    startangle=90)
+            ax1.axis("equal")
+            st.pyplot(fig1, use_container_width=False)
 
+        # Bar Chart
         with col2:
-            st.pyplot(fig2)
+            st.markdown("#### 📊 Risk Level Distribution")
+            fig2, ax2 = plt.subplots(figsize=(3, 3))
+            risk_counts.plot(kind="bar", color=["red", "orange", "green"], ax=ax2)
+            ax2.set_ylabel("Customers")
+            fig2.tight_layout()
+            st.pyplot(fig2, use_container_width=False)
 
+        # Histogram
         with col3:
-            st.pyplot(fig3)
+            st.markdown("#### 📈 Churn Score Distribution")
+            fig3, ax3 = plt.subplots(figsize=(3, 3))
+            ax3.hist(raw_df["ChurnScore"], bins=10, color="skyblue", edgecolor="black")
+            ax3.set_xlabel("Churn Score")
+            ax3.set_ylabel("Customers")
+            fig3.tight_layout()
+            st.pyplot(fig3, use_container_width=False)
+
 
 
         # Download button
