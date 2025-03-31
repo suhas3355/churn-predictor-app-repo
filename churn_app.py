@@ -106,7 +106,7 @@ if uploaded_file:
         # Bar Chart
         with col2:
             st.markdown("#### 📊 Risk Level Distribution")
-            fig2, ax2 = plt.subplots(figsize=(3, 3))
+            fig2, ax2 = plt.subplots(figsize=(2, 2))
             risk_counts.plot(kind="bar", color=["red", "orange", "green"], ax=ax2)
             ax2.set_ylabel("Customers")
             fig2.tight_layout()
@@ -115,7 +115,7 @@ if uploaded_file:
         # Histogram
         with col3:
             st.markdown("#### 📈 Churn Score Distribution")
-            fig3, ax3 = plt.subplots(figsize=(3, 3))
+            fig3, ax3 = plt.subplots(figsize=(2, 2))
             ax3.hist(raw_df["ChurnScore"], bins=10, color="skyblue", edgecolor="black")
             ax3.set_xlabel("Churn Score")
             ax3.set_ylabel("Customers")
@@ -153,3 +153,26 @@ if st.button("Predict Churn for This Customer") and uploaded_file and customer_i
 # Footer
 st.markdown("---")
 st.markdown("🔐 [Privacy Policy](#) | 📫 [Contact](mailto:suhas3355@gmail.com) | 💻 [GitHub](https://github.com/suhas3355/churn-predictor-app-repo)")
+
+from train_utils import train_model_for_business
+import os
+
+st.header("📈 Train Churn Model for Your Business")
+
+business_id = st.text_input("Enter Your Business ID (e.g., biz123)")
+
+uploaded_training = st.file_uploader("Upload historical customer data (with 'Churn' column)", type=["csv"], key="train_upload")
+
+if uploaded_training and business_id:
+    df_train = pd.read_csv(uploaded_training)
+
+    if st.button("🚀 Train My Model"):
+        with st.spinner("Training your model..."):
+            try:
+                result = train_model_for_business(df_train, business_id)
+                st.success(f"Model trained successfully for '{business_id}'")
+                st.write(f"✅ Features used: {len(result['features'])}")
+                st.write(f"📊 Rows after SMOTE: {result['rows_used']}")
+                st.write(f"💡 Churn Rate: {result['churn_rate']}")
+            except Exception as e:
+                st.error(f"Training failed: {e}")
