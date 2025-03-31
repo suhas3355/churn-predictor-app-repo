@@ -1,3 +1,20 @@
+# At the top of churn_app.py
+import os
+import pandas as pd
+import joblib
+from train_utils import train_model_for_business  # ⬅️ Ensure this is imported
+
+st.set_page_config(page_title="Churn Predictor", layout="wide")
+st.title("📊 Multi-Tenant Churn Predictor")
+
+# Add sidebar toggle
+selected_tab = st.sidebar.radio("Choose Action", ["🔍 Predict Churn", "📈 Train Business Model"])
+
+if selected_tab == "🔍 Predict Churn":
+    st.subheader("Churn Prediction - Upload & Score")
+
+# (Your existing prediction logic goes here — file upload, processing, scoring, metrics, charts, etc.)
+
 def preprocess_uploaded_data(df, required_features):
     # Drop label column if present
     if "Churn" in df.columns:
@@ -148,6 +165,36 @@ if st.button("Predict Churn for This Customer") and uploaded_file and customer_i
             st.warning("Customer ID not found in uploaded file.")
     else:
         st.warning("Please upload a CSV file first.")
+
+elif selected_tab == "📈 Train Business Model":
+    st.subheader("Train a Churn Model for Your Business")
+
+    business_id = st.text_input("Enter Your Business or Client Name", placeholder="e.g., acme_co")
+
+    uploaded_file = st.file_uploader(
+        "Upload historical churn data (CSV with a 'Churn' column)", 
+        type=["csv"], 
+        key="train_file"
+    )
+
+    if uploaded_file and business_id:
+        df = pd.read_csv(uploaded_file)
+
+        if st.button("🚀 Train Model for This Business"):
+            with st.spinner(f"Training churn model for '{business_id}'..."):
+                try:
+                    result = train_model_for_business(df, business_id)
+                    st.success(f"✅ Model successfully trained and saved for **{business_id}**!")
+
+                    st.markdown(f"📁 Model Path: `models/{business_id}/churn_model.pkl`")
+                    st.markdown(f"🧬 Features Used: `{len(result['features'])}`")
+                    st.markdown(f"📊 Total Rows After Balancing: `{result['rows_used']}`")
+                    st.markdown(f"📉 Churn Rate in Uploaded Data: `{result['churn_rate']}`")
+
+                except Exception as e:
+                    st.error(f"❌ Training failed: {e}")
+    else:
+        st.info("Please enter a business name and upload a valid CSV file.")
 
 
 # Footer
