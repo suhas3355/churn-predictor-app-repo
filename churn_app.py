@@ -29,12 +29,13 @@ selected_tab = st.sidebar.radio(
 
 # --------------------- TRAIN TAB ---------------------
 if selected_tab == "📈 Train Business Model":
+    st.subheader("🛠️ Train Churn Model for Your Business")
     model_choice = st.selectbox(
-    "Select Model Type",
+    "🧠 Select Model Type to Train",
     ["Random Forest", "Logistic Regression"],
     index=0
     )
-    st.subheader("🛠️ Train Churn Model for Your Business")
+    
     with st.expander("ℹ️ About This Model & Upload Guidelines", expanded=True):
         st.markdown("### 📌 What You Need to Know:")
         st.markdown("""
