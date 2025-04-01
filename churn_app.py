@@ -30,7 +30,7 @@ selected_tab = st.sidebar.radio(
 )
 # Dynamic subheading below the main title
 if selected_tab == "📈 Train Business Model":
-    st.subheader("🛠️ Train Churn Model for Your Business")
+    st.subheader("🛠️ Train Churn Model for Your Business 🌟")
 
     business_id = st.text_input("Enter Business or Client Name", placeholder="e.g., acme_co")
     uploaded_file = st.file_uploader("Upload historical churn data (CSV with a 'Churn' column)", type=["csv"], key="train_csv")
