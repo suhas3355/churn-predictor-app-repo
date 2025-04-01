@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import joblib
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTE
@@ -29,6 +29,8 @@ def train_model_for_business(df, business_id, model_dir="models",model_type="ran
         model = RandomForestClassifier(n_estimators=100, random_state=42)
     elif model_type == "logistic_regression":
         model = LogisticRegression(max_iter=1000)
+    elif model_type == "gradient_boosting":
+        model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, random_state=42)
     else:
         raise ValueError("Unsupported model type")
 

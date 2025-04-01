@@ -32,9 +32,16 @@ if selected_tab == "📈 Train Business Model":
     st.subheader("🛠️ Train Churn Model for Your Business")
     model_choice = st.selectbox(
     "🧠 Select Model Type to Train",
-    ["Random Forest", "Logistic Regression"],
+    ["Random Forest", "Logistic Regression", "Gradient Boosting"],
     index=0
     )
+
+    # ✅ Map UI selection to internal identifiers used in train_utils
+    model_type = {
+        "Random Forest": "random_forest",
+        "Logistic Regression": "logistic_regression",
+        "Gradient Boosting": "gradient_boosting"
+    }[model_choice]
     
     with st.expander("ℹ️ About This Model & Upload Guidelines", expanded=True):
         st.markdown("### 📌 What You Need to Know:")
