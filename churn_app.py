@@ -5,7 +5,7 @@ import joblib
 from train_utils import train_model_for_business  # ⬅️ Ensure this is imported
 
 st.set_page_config(page_title="Churn Predictor", layout="wide")
-st.title("📊 Multi-Tenant Churn Predictor")
+st.title("📊 Churn Predictor - Upload & Score Customers")
 
 # Add sidebar toggle
 selected_tab = st.sidebar.radio("Choose Action", ["🔍 Predict Churn", "📈 Train Business Model"])
@@ -41,8 +41,6 @@ import joblib
 model = joblib.load("churn_model.pkl")
 features = joblib.load("model_features.pkl")
 
-st.set_page_config(page_title="Churn Predictor", layout="wide")
-st.title("📊 Churn Predictor - Upload & Score Customers")
 
 # Upload CSV
 st.subheader("1. Upload Customer File")
@@ -201,10 +199,10 @@ elif selected_tab == "📈 Train Business Model":
 st.markdown("---")
 st.markdown("🔐 [Privacy Policy](#) | 📫 [Contact](mailto:suhas3355@gmail.com) | 💻 [GitHub](https://github.com/suhas3355/churn-predictor-app-repo)")
 
-from train_utils import train_model_for_business
-import os
+#from train_utils import train_model_for_business
+#import os
 
-st.header("📈 Train Churn Model for Your Business")
+#st.header("📈 Train Churn Model for Your Business")
 
 business_id = st.text_input("Enter Your Business ID (e.g., biz123)")
 
