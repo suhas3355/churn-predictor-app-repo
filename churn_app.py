@@ -30,6 +30,26 @@ selected_tab = st.sidebar.radio(
 # --------------------- TRAIN TAB ---------------------
 if selected_tab == "📈 Train Business Model":
     st.subheader("🛠️ Train Churn Model for Your Business")
+    with st.expander("ℹ️ About This Model & Upload Guidelines", expanded=True):
+        st.markdown("### 📌 What You Need to Know:")
+        st.markdown("""
+        - We use a **Random Forest Classifier** to predict customer churn.
+        - The model is trained using your historical data — no data is shared or stored beyond training.
+        - Churn is predicted as a **binary classification**: Likely to Stay (0) or Likely to Churn (1).
+        """)
+
+        st.markdown("### 📝 Mandatory Columns in Your CSV:")
+        st.markdown("""
+        - `CustomerID` *(optional but recommended)*  
+        - `Tenure` *(months the customer has been with you)*  
+        - `OrderCount` *(total number of orders)*  
+        - `HourSpendOnApp` *(how long the customer spends in your app)*  
+        - `SatisfactionScore` *(1 to 5 scale)*  
+        - `CashbackAmount` *(total cashback used)*  
+        - `Churn` *(0 for stay, 1 for churn — this is your label)*  
+        """)
+
+        st.info("💡 You can include additional features like Gender, Device, CityTier, PaymentMode, etc. — we’ll handle the rest.")
 
     business_id = st.text_input("Enter Business or Client Name", placeholder="e.g., acme_co")
     uploaded_file = st.file_uploader("Upload historical churn data (CSV with a 'Churn' column)", type=["csv"], key="train_csv")
@@ -42,6 +62,22 @@ if selected_tab == "📈 Train Business Model":
                 try:
                     result = train_model_for_business(df, business_id)
                     st.success(f"✅ Model successfully trained for **{business_id}**!")
+
+                    with st.expander("📈 Model Training Summary", expanded=True):
+                        st.markdown("### 🔍 Key Stats")
+                        st.markdown(f"- Total rows after SMOTE balancing: `{result['rows_used']}`")
+                        st.markdown(f"- Features used: `{len(result['features'])}`")
+                        
+                        churn_rate = result.get("churn_rate", {})
+                        if churn_rate:
+                            st.markdown("### ⚖️ Churn Class Balance in Your Data:")
+                            for k, v in churn_rate.items():
+                                label = "Churned" if str(k) == "1" else "Not Churned"
+                                st.markdown(f"- **{label}**: {round(v * 100, 2)}%")
+                        
+                        st.markdown("### ✅ What’s Next?")
+                        st.markdown("- You can now use this model in the **Predict Churn** tab.")
+                        st.markdown("- If needed, you can retrain it anytime with updated data.")
                 except Exception as e:
                     st.error(f"❌ Training failed: {e}")
     else:
