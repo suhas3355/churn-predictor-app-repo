@@ -7,14 +7,32 @@ import pandas as pd
 import joblib
 from train_utils import train_model_for_business  # ⬅️ Ensure this is imported
 
-st.set_page_config(page_title="Churn Predictor", layout="wide")
-st.title("📊 Churn Predictor - Upload & Score Customers")
+# Set page config and title
+st.set_page_config(page_title="Retention Intelligence Tool", layout="wide")
 
-# Add sidebar toggle
-selected_tab = st.sidebar.radio("Choose Action", ["🔍 Predict Churn", "📈 Train Business Model"])
+# Global header for all pages
+st.markdown("## 📊 Retention Intelligence Tool")
+st.markdown("---")
 
-if selected_tab == "🔍 Predict Churn":
-    st.subheader("Churn Prediction - Upload & Score")
+st.sidebar.markdown("### 🧭 Select Mode", unsafe_allow_html=True)
+
+tab_options = {
+    "📈 Train Business Model": "📈 Train Business Model",
+    "🔍 Predict Churn": "🔍 Predict Churn"
+}
+
+selected_tab = st.sidebar.radio(
+    "Navigation",
+    list(tab_options.keys()),
+    index=0,  # 👈 Makes "Train Business Model" the first (default)
+    format_func=lambda x: f"  {tab_options[x]}",  # adds spacing
+    label_visibility="collapsed"
+)
+# Dynamic subheading below the main title
+if selected_tab == "📈 Train Business Model":
+    st.subheader("🛠️ Train Business Model")
+elif selected_tab == "🔍 Predict Churn":
+    st.subheader("📉 Churn Score Calculator")
 
 # (Your existing prediction logic goes here — file upload, processing, scoring, metrics, charts, etc.)
 
