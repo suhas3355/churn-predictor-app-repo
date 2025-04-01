@@ -2,6 +2,9 @@
 import os
 import pandas as pd
 import joblib
+import streamlit as st
+import pandas as pd
+import joblib
 from train_utils import train_model_for_business  # ⬅️ Ensure this is imported
 
 st.set_page_config(page_title="Churn Predictor", layout="wide")
@@ -33,9 +36,7 @@ def preprocess_uploaded_data(df, required_features):
 
     return df
 
-import streamlit as st
-import pandas as pd
-import joblib
+
 
 # Load model and features
 model = joblib.load("churn_model.pkl")
