@@ -199,10 +199,10 @@ elif selected_tab == "📈 Train Business Model":
 st.markdown("---")
 st.markdown("🔐 [Privacy Policy](#) | 📫 [Contact](mailto:suhas3355@gmail.com) | 💻 [GitHub](https://github.com/suhas3355/churn-predictor-app-repo)")
 
-#from train_utils import train_model_for_business
-#import os
+from train_utils import train_model_for_business
+import os
 
-#st.header("📈 Train Churn Model for Your Business")
+st.header("📈 Train Churn Model for Your Business")
 
 business_id = st.text_input("Enter Your Business ID (e.g., biz123)")
 
