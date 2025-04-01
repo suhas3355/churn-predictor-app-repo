@@ -3,9 +3,10 @@ import os
 import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTE
 
-def train_model_for_business(df, business_id, model_dir="models"):
+def train_model_for_business(df, business_id, model_dir="models",model_type="random_forest"):
     # Preprocessing
     df = df.dropna()
     if 'CustomerID' in df.columns:
@@ -24,7 +25,13 @@ def train_model_for_business(df, business_id, model_dir="models"):
     X_resampled, y_resampled = smote.fit_resample(X, y)
 
     # Train model
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    if model_type == "random_forest":
+        model = RandomForestClassifier(n_estimators=100, random_state=42)
+    elif model_type == "logistic_regression":
+        model = LogisticRegression(max_iter=1000)
+    else:
+        raise ValueError("Unsupported model type")
+
     model.fit(X_resampled, y_resampled)
 
     # Save model + features

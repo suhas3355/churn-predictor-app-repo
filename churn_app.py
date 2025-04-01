@@ -29,6 +29,11 @@ selected_tab = st.sidebar.radio(
 
 # --------------------- TRAIN TAB ---------------------
 if selected_tab == "📈 Train Business Model":
+    model_choice = st.selectbox(
+    "Select Model Type",
+    ["Random Forest", "Logistic Regression"],
+    index=0
+    )
     st.subheader("🛠️ Train Churn Model for Your Business")
     with st.expander("ℹ️ About This Model & Upload Guidelines", expanded=True):
         st.markdown("### 📌 What You Need to Know:")
@@ -60,7 +65,8 @@ if selected_tab == "📈 Train Business Model":
         if st.button("🚀 Train Model"):
             with st.spinner(f"Training churn model for '{business_id}'..."):
                 try:
-                    result = train_model_for_business(df, business_id)
+                    model_type = "random_forest" if model_choice == "Random Forest" else "logistic_regression"
+                    result = train_model_for_business(df, business_id, model_type=model_type)
                     st.success(f"✅ Model successfully trained for **{business_id}**!")
 
                     with st.expander("📈 Model Training Summary", expanded=True):
