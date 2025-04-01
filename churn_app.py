@@ -1,4 +1,5 @@
 import os
+os.makedirs("models", exist_ok=True)
 import pandas as pd
 import joblib
 import streamlit as st
